@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to the Home Page</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background-color: #ffffff;
+        color: #fff;
+      }
+
+      .container {
+        margin: 20px;
+      }
+
+      h1 {
+        color: #000000;
+        text-align: center;
+      }
+      h2 {
+        color: #000000;
+      }
+
+      .article-form-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #a0a0a0;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #000000;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #ffdfe6;
+        color: #000;
+      }
+
+      button {
+        background-color: #ffdfe6;
+        color: #000000;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #ffdfe6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Create New Note</h1>
+      <div class="article-form-container">
+        <h2>Create Article</h2>
+        <form id="createArticleForm">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" required />
+
+          <label for="content">Content:</label>
+          <textarea id="content" name="content" required rows="6"></textarea>
+
+          <button type="button" onclick="createArticle()">
+            Create Article
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const BASE_API_URL = "{{ BASE_API_URL }}";
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+      function createArticle() {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        const data = {
+          title: title,
+          content: content,
+        };
+        const csrfToken = getCookie("csrftoken");
+        console.log("----------------", BASE_API_URL);
+        fetch(`${BASE_API_URL}/todo/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = "{% url 'home-page' %}";
+            } else {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+          })
+
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(`Error: ${error.message}`);
+          });
+      }
+    </script>
+  </body>
+</html>
