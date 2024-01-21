@@ -2,7 +2,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.HomePageView.as_view(), name="home-page"),
+    path('', views.LoginPageView.as_view(), name="login-page"),
+    path('signup_page/', views.SignupPageView.as_view(), name="signup-page"),
+    path('home_page/', views.HomePageView.as_view(), name="home-page"),
+    path('signup_API/', views.CreateUserAPIView.as_view(), name="signup-API"),
+    path('login_API/', views.LoginAPIView.as_view(), name="login-API"),
     path('update_todo_page/', views.UpdateTodoView.as_view(),
          name="update-todo-page"),
     path('todo/', views.TodoAPIView.as_view(), name="todo"),

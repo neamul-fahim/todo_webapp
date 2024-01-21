@@ -146,7 +146,7 @@
             throw new Error("Failed to update article");
           }
 
-          window.location.href = `${BASE_API_URL}`;
+          window.location.href = `${BASE_API_URL}/home_page`;
         } catch (error) {
           console.error("Error updating article:", error);
           alert(`Error: ${error.message}`);
